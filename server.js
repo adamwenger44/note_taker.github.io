@@ -30,7 +30,31 @@ app.get("/api/notes", function (req, res) {
 
 // Create New Note - takes in JSON input
 
+app.post("/api/notes", function(req, res) {
+    // req.body hosts is equal to the JSON post sent from the user
+    // This works because of our body parsing middleware
+    var newNote = req.body;
+  
+    console.log(newNote);
+  
+    allNotes.push(newNote);
+  
+    res.json(newNote);
 
+    var stringifyNote = JSON.stringify(allNotes)
+    fs.writeFileSync(path.join('./db/db.json'), stringifyNote, (err) => {
+        if (err) throw err;
+    });
+
+    allNotes.forEach((item, i) => {
+        item.id = i + 1;
+      });
+
+  });
+
+  app.delete("/api/notes/:id", function(req, res) { 
+    
+  });
 
 
 app.listen(PORT, function () {
